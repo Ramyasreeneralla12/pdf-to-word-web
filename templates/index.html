@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF to Word Converter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        button, .download-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        button:hover, .download-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        #loading {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>PDF to Word Converter</h2>
+
+    <form method="POST" enctype="multipart/form-data" onsubmit="return validateFile()">
+        <input type="file" id="pdfFile" name="pdf" accept=".pdf" required>
+        <button type="submit">Convert to Word</button>
+        <p id="loading">⏳ Converting... Please wait</p>
+    </form>
+
+    {% if error %}
+        <p class="message error">❌ {{ error }}</p>
+    {% endif %}
+
+    {% if success %}
+        <p class="message success">✅<h5> Conversion successful!</h5></p>
+        <a class="download-btn" href="/download/{{ download_file }}">
+            📥 Download Word File
+        </a>
+    {% endif %}
+</div>
+
+<script>
+    function validateFile() {
+        const fileInput = document.getElementById("pdfFile");
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert("Please select a file.");
+            return false;
+        }
+
+        if (!file.name.toLowerCase().endsWith(".pdf")) {
+            alert("❌ Only PDF files are allowed.");
+            fileInput.value = "";
+            return false;
+        }
+
+        document.getElementById("loading").style.display = "block";
+        return true;
+    }
+</script>
+
+</body>
+</html>
